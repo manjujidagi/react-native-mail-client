@@ -1,6 +1,6 @@
 {
   "name": "react-native-mail-client",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Mail Client without intermediate server",
   "main": "./lib/module/index.js",
   "types": "./lib/typescript/src/index.d.ts",

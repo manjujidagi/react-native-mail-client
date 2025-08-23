@@ -38,7 +38,18 @@ export interface InboxMail {
 
 function ensureNativeModule() {
   if (!MailClientModule) {
-    throw new Error(LINKING_ERROR);
+    // Debug: log available native modules to help diagnose linking issues
+    console.error(
+      'MailClientModule is undefined. NativeModules available:',
+      Object.keys(NativeModules)
+    );
+    throw new Error(
+      LINKING_ERROR +
+        '\nNativeModules.MailClientModule is undefined. ' +
+        'Check if the native code is correctly linked and the module name matches.'
+    );
+  } else {
+    console.log('MailClientModule is successfully linked.');
   }
 }
 
