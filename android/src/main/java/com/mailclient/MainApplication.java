@@ -1,5 +1,6 @@
 // ...existing code...
 import com.mailclient.MailClientPackage;
+import com.facebook.react.PackageList; // <-- Add this import if missing
 // ...existing code...
 @Override
 protected List<ReactPackage> getPackages() {
