@@ -6,16 +6,7 @@ const LINKING_ERROR =
   '- You rebuilt the app after installing the package\n' +
   '- You are not using Expo Go\n';
 
-const MailClientModule = NativeModules.MailClientModule
-  ? NativeModules.MailClientModule
-  : new Proxy(
-      {},
-      {
-        get() {
-          throw new Error(LINKING_ERROR);
-        },
-      }
-    );
+const MailClientModule = NativeModules.MailClientModule;
 
 export interface SMTPConfig {
   host: string;
@@ -45,10 +36,17 @@ export interface InboxMail {
   snippet: string;
 }
 
+function ensureNativeModule() {
+  if (!MailClientModule) {
+    throw new Error(LINKING_ERROR);
+  }
+}
+
 /**
  * Connect to SMTP server
  */
 export function connectSMTP(config: SMTPConfig): Promise<string> {
+  ensureNativeModule();
   return MailClientModule.connectSMTP(config);
 }
 
@@ -56,6 +54,7 @@ export function connectSMTP(config: SMTPConfig): Promise<string> {
  * Send an email via SMTP
  */
 export function sendEmail(mail: Email): Promise<string> {
+  ensureNativeModule();
   return MailClientModule.sendEmail(mail);
 }
 
@@ -63,6 +62,7 @@ export function sendEmail(mail: Email): Promise<string> {
  * Connect to IMAP server
  */
 export function connectIMAP(config: IMAPConfig): Promise<string> {
+  ensureNativeModule();
   return MailClientModule.connectIMAP(config);
 }
 
@@ -70,5 +70,15 @@ export function connectIMAP(config: IMAPConfig): Promise<string> {
  * Fetch inbox mails (returns array of InboxMail)
  */
 export function fetchInbox(): Promise<InboxMail[]> {
+  ensureNativeModule();
   return MailClientModule.fetchInbox();
 }
+
+export default {
+  connectSMTP,
+  sendEmail,
+  connectIMAP,
+  fetchInbox,
+  // Optionally export types for TypeScript users
+  // SMTPConfig, IMAPConfig, Email, InboxMail
+};
