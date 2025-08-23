@@ -8,11 +8,14 @@ const LINKING_ERROR =
 
 const MailClientModule = NativeModules.MailClientModule
   ? NativeModules.MailClientModule
-  : new Proxy({}, {
-      get() {
-        throw new Error(LINKING_ERROR);
-      },
-    });
+  : new Proxy(
+      {},
+      {
+        get() {
+          throw new Error(LINKING_ERROR);
+        },
+      }
+    );
 
 export interface SMTPConfig {
   host: string;
